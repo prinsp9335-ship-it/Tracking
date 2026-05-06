@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Employee Live Tracker</h2>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  databaseURL: "https://outlettracking-53331-default-rtdb.firebaseio.com",
+  projectId: "outlettracking-53331"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const empId = prompt("Enter ID");
+
+navigator.geolocation.watchPosition((pos) => {
+
+  set(ref(db, "employees/" + empId), {
+    lat: pos.coords.latitude,
+    lon: pos.coords.longitude,
+    time: Date.now()
+  });
+
+});
+
+</script>
+
+</body>
+</html>
