@@ -4,6 +4,20 @@
 
 <h2>Employee Live Tracker</h2>
 
+<!-- 🔒 Force ID Popup -->
+<div id="idBox" style="
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.7);display:flex;
+align-items:center;justify-content:center;z-index:9999;">
+
+  <div style="background:#fff;padding:20px;border-radius:8px;text-align:center;">
+    <h3>Enter Employee ID</h3>
+    <input id="empInput" type="text" placeholder="Enter ID"><br><br>
+    <button onclick="submitId()">Start</button>
+  </div>
+
+</div>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
@@ -20,18 +34,25 @@ const db = getDatabase(app);
 
 let empId = "";
 
-while (!empId) {
-  empId = prompt("Enter Employee ID");
+// ✅ Submit ID
+window.submitId = function() {
 
-  if (empId === null || empId.trim() === "") {
-    alert("ID enter करना जरूरी है!");
-    empId = "";
+  const val = document.getElementById("empInput").value.trim();
+
+  if (!val) {
+    alert("ID डालना जरूरी है!");
+    return;
   }
-}
-console.log("Trying location...");
-if (!empId) {
-  alert("Enter ID first");
-} else {
+
+  empId = val;
+
+  document.getElementById("idBox").style.display = "none";
+
+  startTracking();
+};
+
+// 📍 Start Tracking
+function startTracking() {
 
   navigator.geolocation.watchPosition(
     (pos) => {
