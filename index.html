@@ -10,9 +10,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/fireba
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  databaseURL: "https://outlettracking-53331-default-rtdb.firebaseio.com",
-  projectId: "outlettracking-53331"
+  apiKey: "AIzaSyCOwJ1_MJsK_Ye7mhhMRlimQQ31LfGd7UY",
+  databaseURL: "https://outlettracking-25495-default-rtdb.firebaseio.com",
+  projectId: "outlettracking-25495"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -20,15 +20,31 @@ const db = getDatabase(app);
 
 const empId = prompt("Enter ID");
 
-navigator.geolocation.watchPosition((pos) => {
+if (!empId) {
+  alert("Enter ID first");
+} else {
 
-  set(ref(db, "employees/" + empId), {
-    lat: pos.coords.latitude,
-    lon: pos.coords.longitude,
-    time: Date.now()
-  });
+  navigator.geolocation.watchPosition(
+    (pos) => {
 
-});
+      set(ref(db, "employees/" + empId), {
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+        time: Date.now()
+      });
+
+    },
+    (err) => {
+      alert("Location error: " + err.message);
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000
+    }
+  );
+
+}
 
 </script>
 
